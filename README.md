@@ -1,11 +1,14 @@
-# EverTrust Protocol 🛡️
-> **Autonomous, Confidential Digital Wealth Succession & Dead Man's Switch on Starknet STRK20.**
+<p align="center">
+  <img src="public/banner.svg" alt="EverTrust Protocol — Starknet STRK20 Confidential Wealth Succession & Dead Man's Switch" width="100%" />
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
-[![Starknet](https://img.shields.io/badge/Starknet-Mainnet-blue.svg)](https://starknet.io)
-[![STRK20](https://img.shields.io/badge/STRK20-Shielded_Pool-purple.svg)](https://starkscan.co)
-[![Cairo](https://img.shields.io/badge/Cairo-2.x-purple.svg)](https://cairo-lang.org)
-[![Theme: Dark & Light](https://img.shields.io/badge/Theme-Dark%20%7C%20Light-purple.svg)](https://evertrust-protocol.vercel.app)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-purple.svg" alt="License: MIT" /></a>
+  <a href="https://starknet.io"><img src="https://img.shields.io/badge/Starknet-Mainnet-blue.svg" alt="Starknet Mainnet" /></a>
+  <a href="https://starkscan.co"><img src="https://img.shields.io/badge/STRK20-Shielded_Pool-purple.svg" alt="STRK20 Shielded Pool" /></a>
+  <a href="https://cairo-lang.org"><img src="https://img.shields.io/badge/Cairo-2.x-purple.svg" alt="Cairo 2.x" /></a>
+  <img src="https://img.shields.io/badge/Theme-Dark%20%7C%20Light-purple.svg" alt="Theme: Dark | Light" />
+</p>
 
 ---
 
