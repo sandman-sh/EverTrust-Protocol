@@ -8,8 +8,10 @@ export const STARKNET_CONFIG = {
   rpcUrl: 'https://starknet-mainnet.public.blastapi.io',
   explorerUrl: 'https://starkscan.co',
   
-  // STRK Token Address on Starknet Mainnet
+  // Supported Token Addresses on Starknet Mainnet
   strkTokenAddress: '0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d',
+  ethTokenAddress: '0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7',
+  usdcTokenAddress: '0x053c91253bc9682c04929ca02ed00b3e423f6710d2ee7e0d5ebb06f3ecf368a8',
   
   // STRK20 Privacy Pool Contract Address on Mainnet
   privacyPoolAddress: '0x0254a6b2997ef52e9f830ce1f543f6b29768295e8d17e2267d672c552cfe0d91',
@@ -27,6 +29,14 @@ export const STARKNET_CONFIG = {
   
   gracePeriodSeconds: 604800, // 7 days grace period
 };
+
+export interface ShieldedAsset {
+  symbol: 'STRK' | 'ETH' | 'USDC';
+  name: string;
+  amount: string;
+  tokenAddress: string;
+  usdValue: number;
+}
 
 export interface VestingSchedule {
   enabled: boolean;
@@ -73,6 +83,7 @@ export interface TrustVault {
   viewingKey?: string;
   vestingSchedule?: VestingSchedule;
   guardians?: Guardian[];
+  assets?: ShieldedAsset[];
 }
 
 export function formatStrkAmount(amount: string | number): string {

@@ -197,6 +197,44 @@ export const VaultDashboard: React.FC<VaultDashboardProps> = ({
           </div>
         </div>
 
+        {/* Multi-Token Shielded Asset Basket */}
+        <div className="hairline-card p-6 bg-white dark:bg-night space-y-4">
+          <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/10 pb-3">
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+              <h3 className="font-sans text-sm font-bold uppercase tracking-wider text-zinc-900 dark:text-white">
+                Multi-Asset Shielded Portfolio Basket
+              </h3>
+            </div>
+            <span className="font-mono text-xs text-purple-600 dark:text-purple-400 font-bold">
+              Total USD Value: ~$30,900 USD
+            </span>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            {(activeVault.assets || [
+              { symbol: 'STRK', name: 'Starknet Token', amount: '25,000.00', usdValue: 8750 },
+              { symbol: 'ETH', name: 'Ethereum L2', amount: '4.50', usdValue: 12150 },
+              { symbol: 'USDC', name: 'USD Coin', amount: '10,000.00', usdValue: 10000 },
+            ]).map(asset => (
+              <div key={asset.symbol} className="border border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-black p-4 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-sans text-sm font-bold text-zinc-900 dark:text-white">{asset.symbol}</span>
+                  <span className="font-mono text-[0.65rem] border border-purple-500/40 bg-purple-500/10 px-2 py-0.5 text-purple-600 dark:text-purple-300 font-bold">
+                    SHIELDED
+                  </span>
+                </div>
+                <p className="font-mono text-lg font-bold text-purple-600 dark:text-purple-400">
+                  {asset.amount} {asset.symbol}
+                </p>
+                <p className="font-mono text-[0.65rem] text-zinc-500 dark:text-graphite">
+                  ≈ ${asset.usdValue.toLocaleString()} USD
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Beneficiaries Breakdown Table */}
         <div className="hairline-card overflow-hidden bg-white dark:bg-night">
           <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-black p-5">
