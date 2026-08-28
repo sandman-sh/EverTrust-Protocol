@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { STARKNET_CONFIG, TrustVault, Beneficiary } from '@/lib/strk20';
-import { computeNoteCommitment, computeNullifier, generateSalt, deriveAuditorViewingKey } from '@/lib/crypto';
+import { computeNoteCommitment, computeNullifier, generateSalt, deriveAuditorViewingKey, encryptPayloadForHeir, decryptPayloadWithHeirKey } from '@/lib/crypto';
 import confetti from 'canvas-confetti';
 
 export type WalletType = 'argentX' | 'braavos' | 'ready' | 'cartridge' | 'test';
@@ -21,7 +21,7 @@ interface StarknetWalletContextType {
     name: string,
     amountStrk: string,
     cadenceSeconds: number,
-    beneficiaries: { name: string; addressOrPubKey: string; percentage: number }[]
+    beneficiaries: { name: string; addressOrPubKey: string; percentage: number; message?: string }[]
   ) => Promise<{ success: boolean; vaultId?: string; error?: string }>;
   pingHeartbeat: (vaultId: string) => Promise<boolean>;
   claimInheritance: (
@@ -29,7 +29,7 @@ interface StarknetWalletContextType {
     claimKey: string,
     beneficiaryIndex: number,
     recipientAddress: string
-  ) => Promise<{ success: boolean; amount?: string; error?: string }>;
+  ) => Promise<{ success: boolean; amount?: string; decryptedMessage?: string; error?: string }>;
   revokeVault: (vaultId: string) => Promise<boolean>;
   setActiveVaultId: (vaultId: string) => void;
   generateAuditorKey: (vaultId: string) => string;
@@ -37,7 +37,7 @@ interface StarknetWalletContextType {
 
 const StarknetWalletContext = createContext<StarknetWalletContextType | undefined>(undefined);
 
-// Initial Demo/Mainnet Vault Seeds
+// Initial Demo/Mainnet Vault Seeds with encrypted Digital Will messages
 const DEFAULT_INITIAL_VAULTS: TrustVault[] = [
   {
     id: 'vault_genesis_01',
@@ -61,6 +61,10 @@ const DEFAULT_INITIAL_VAULTS: TrustVault[] = [
         commitment: '0x07f18a2bc41904',
         claimKey: 'claim_evertrust_sarah_901827419',
         claimed: false,
+        encryptedMessage: encryptPayloadForHeir(
+          { willMessage: 'Sarah, I leave you 60% of our family STRK wealth. Use this wisely for your medical studies. The master seed phrase for the cold storage vault is deposited in Zurich safe deposit box #419 under your legal name.' },
+          '0x04ff4f083a4667930efe14963645f9bda00bb10d44e4c13a9ee808e66c076211'
+        ),
       },
       {
         id: 'b2',
@@ -71,6 +75,10 @@ const DEFAULT_INITIAL_VAULTS: TrustVault[] = [
         commitment: '0x04ca91841a0293',
         claimKey: 'claim_evertrust_alex_441029381',
         claimed: false,
+        encryptedMessage: encryptPayloadForHeir(
+          { willMessage: 'Alex, I am proud of your entrepreneurial spirit. Here is your 40% trust allocation. Always remember to stay self-sovereign, maintain privacy, and support the family.' },
+          '0x03ce58babb9bc3651131657c273aae00cca554ffdccb13dba8b2d06ce60d61d5'
+        ),
       },
     ],
   },
@@ -185,7 +193,7 @@ export const StarknetWalletProvider = ({ children }: { children: ReactNode }) =>
     name: string,
     amountStrk: string,
     cadenceSeconds: number,
-    beneficiariesInput: { name: string; addressOrPubKey: string; percentage: number }[]
+    beneficiariesInput: { name: string; addressOrPubKey: string; percentage: number; message?: string }[]
   ): Promise<{ success: boolean; vaultId?: string; error?: string }> => {
     try {
       const now = Math.floor(Date.now() / 1000);
@@ -196,6 +204,12 @@ export const StarknetWalletProvider = ({ children }: { children: ReactNode }) =>
         const salt = generateSalt();
         const commitment = computeNoteCommitment(b.addressOrPubKey, Math.round(b.percentage * 100), salt);
         const claimKey = `claim_evertrust_${b.name.toLowerCase().replace(/[^a-z0-9]/g, '')}_${generateSalt().slice(2, 10)}`;
+        
+        // Encrypt optional digital will message for this heir
+        const encryptedMessage = b.message 
+          ? encryptPayloadForHeir({ willMessage: b.message }, b.addressOrPubKey)
+          : undefined;
+
         return {
           id: `b_${idx}_${Date.now()}`,
           name: b.name,
@@ -205,6 +219,7 @@ export const StarknetWalletProvider = ({ children }: { children: ReactNode }) =>
           commitment,
           claimKey,
           claimed: false,
+          encryptedMessage,
         };
       });
 
@@ -275,7 +290,7 @@ export const StarknetWalletProvider = ({ children }: { children: ReactNode }) =>
     claimKey: string,
     beneficiaryIndex: number,
     recipientAddress: string
-  ): Promise<{ success: boolean; amount?: string; error?: string }> => {
+  ): Promise<{ success: boolean; amount?: string; decryptedMessage?: string; error?: string }> => {
     try {
       const vault = vaults.find(v => v.id === vaultId);
       if (!vault) {
@@ -293,11 +308,20 @@ export const StarknetWalletProvider = ({ children }: { children: ReactNode }) =>
 
       const shareAmount = ((parseFloat(vault.totalShieldedAmount) * targetBeneficiary.percentage) / 100).toFixed(2);
 
+      // Decrypt digital will note payload if present
+      let decryptedMsg = '';
+      if (targetBeneficiary.encryptedMessage) {
+        const payload = decryptPayloadWithHeirKey(targetBeneficiary.encryptedMessage, claimKey);
+        if (payload && payload.willMessage) {
+          decryptedMsg = payload.willMessage;
+        }
+      }
+
       setVaults(prev =>
         prev.map(v => {
           if (v.id === vaultId) {
             const updatedBeneficiaries = v.beneficiaries.map(b =>
-              b.id === targetBeneficiary.id ? { ...b, claimed: true } : b
+              b.id === targetBeneficiary.id ? { ...b, claimed: true, decryptedMessage: decryptedMsg } : b
             );
             const allClaimed = updatedBeneficiaries.every(b => b.claimed);
             return {
@@ -317,7 +341,7 @@ export const StarknetWalletProvider = ({ children }: { children: ReactNode }) =>
         colors: ['#A855F7', '#C084FC', '#10B981', '#FFFFFF'],
       });
 
-      return { success: true, amount: shareAmount };
+      return { success: true, amount: shareAmount, decryptedMessage: decryptedMsg };
     } catch (err: any) {
       return { success: false, error: err.message || 'Claim execution failed' };
     }

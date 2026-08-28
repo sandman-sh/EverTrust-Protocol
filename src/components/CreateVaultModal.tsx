@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useStarknetWallet } from '@/context/StarknetWalletContext';
 import { STARKNET_CONFIG } from '@/lib/strk20';
-import { Shield, Heart, Users, X, ArrowRight, ArrowLeft, Check, Plus, Trash2, Key } from 'lucide-react';
+import { Shield, Heart, Users, X, ArrowRight, ArrowLeft, Check, Plus, Trash2, Key, FileText, Lock } from 'lucide-react';
 
 interface CreateVaultModalProps {
   isOpen: boolean;
@@ -22,17 +22,19 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
   const [selectedCadence, setSelectedCadence] = useState<number>(STARKNET_CONFIG.cadencePresets[1].seconds); // 90 days
 
   const [beneficiaries, setBeneficiaries] = useState<
-    { name: string; addressOrPubKey: string; percentage: number }[]
+    { name: string; addressOrPubKey: string; percentage: number; message?: string }[]
   >([
     {
       name: 'Primary Beneficiary (Child)',
       addressOrPubKey: '0x04ff4f083a4667930efe14963645f9bda00bb10d44e4c13a9ee808e66c076211',
       percentage: 70,
+      message: 'Here is your 70% family estate fund. The cold storage seed phrase backup is in safe deposit box #419.',
     },
     {
       name: 'Secondary Beneficiary (Partner)',
       addressOrPubKey: '0x03ce58babb9bc3651131657c273aae00cca554ffdccb13dba8b2d06ce60d61d5',
       percentage: 30,
+      message: 'Always remain self-sovereign. Maintain the family wealth with privacy and diligence.',
     },
   ]);
 
@@ -47,6 +49,7 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
         name: `Beneficiary #${prev.length + 1}`,
         addressOrPubKey: '',
         percentage: Math.max(0, 100 - totalPercentage),
+        message: '',
       },
     ]);
   };
@@ -188,11 +191,11 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
           </div>
         )}
 
-        {/* Step 3: Beneficiary Allocations */}
+        {/* Step 3: Beneficiary Allocations & Encrypted Digital Will */}
         {step === 3 && (
           <div className="mt-6 space-y-4">
             <div className="flex items-center justify-between">
-              <label className="label-mono">Designate Beneficiaries & Shares</label>
+              <label className="label-mono">Designate Beneficiaries & Encrypted Will</label>
               <span
                 className={`font-mono text-xs font-bold ${
                   totalPercentage === 100 ? 'text-emerald-500 dark:text-emerald-400' : 'text-purple-600 dark:text-purple-400'
@@ -202,7 +205,7 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
               </span>
             </div>
 
-            <div className="max-h-60 space-y-3 overflow-y-auto pr-1">
+            <div className="max-h-64 space-y-3 overflow-y-auto pr-1">
               {beneficiaries.map((b, idx) => (
                 <div key={idx} className="border border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-black p-3.5 space-y-2.5">
                   <div className="flex items-center justify-between gap-2">
@@ -231,6 +234,7 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
                       </button>
                     )}
                   </div>
+
                   <input
                     type="text"
                     value={b.addressOrPubKey}
@@ -238,6 +242,21 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
                     placeholder="Starknet Address or Ephemeral Public Key (0x...)"
                     className="w-full border border-zinc-200 bg-white dark:border-white/10 dark:bg-night p-2 font-mono text-[0.7rem] text-zinc-700 dark:text-steel focus:border-purple-500 focus:outline-none"
                   />
+
+                  {/* Encrypted Digital Will Note */}
+                  <div>
+                    <div className="flex items-center gap-1.5 font-mono text-[0.65rem] text-purple-600 dark:text-purple-400 font-bold mb-1">
+                      <Lock className="h-3 w-3" />
+                      <span>Confidential Digital Will & Instructions (Encrypted for Heir)</span>
+                    </div>
+                    <textarea
+                      rows={2}
+                      value={b.message || ''}
+                      onChange={e => updateBeneficiary(idx, 'message', e.target.value)}
+                      placeholder="e.g. Secret message, physical safe deposit combination, or estate instructions revealed only upon claim..."
+                      className="w-full border border-zinc-200 bg-white dark:border-white/10 dark:bg-night p-2 font-mono text-xs text-zinc-900 dark:text-white focus:border-purple-500 focus:outline-none resize-none"
+                    />
+                  </div>
                 </div>
               ))}
             </div>

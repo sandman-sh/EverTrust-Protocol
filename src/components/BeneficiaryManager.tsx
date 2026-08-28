@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useStarknetWallet } from '@/context/StarknetWalletContext';
-import { Users, Key, Copy, Check, Shield, Download, Plus, ArrowUpRight } from 'lucide-react';
+import { Users, Key, Copy, Check, Shield, Download, Plus, ArrowUpRight, Lock, FileText, ScrollText } from 'lucide-react';
 
 export const BeneficiaryManager: React.FC = () => {
   const { activeVault } = useStarknetWallet();
@@ -89,6 +89,22 @@ export const BeneficiaryManager: React.FC = () => {
                   <Shield className="h-3 w-3 text-purple-600 dark:text-purple-400" />
                 </div>
                 <p className="mt-1 text-zinc-700 dark:text-steel break-all text-[0.7rem]">{b.commitment}</p>
+              </div>
+
+              {/* Encrypted Digital Will Status */}
+              <div className="mt-3 border border-purple-500/30 bg-purple-500/5 dark:border-purple-500/20 dark:bg-purple-950/10 p-3 font-mono text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold flex items-center gap-1.5">
+                    <Lock className="h-3 w-3" />
+                    <span>Encrypted Digital Will Attached:</span>
+                  </span>
+                  <span className="text-[0.65rem] border border-purple-500/40 bg-purple-500/10 px-2 py-0.5 text-purple-600 dark:text-purple-300 font-bold">
+                    AES-GCM SHIELDED
+                  </span>
+                </div>
+                <p className="mt-1 text-zinc-500 dark:text-steel text-[0.65rem]">
+                  Confidential instructions are encrypted with the heir&#39;s key and will only be decrypted upon redemption.
+                </p>
               </div>
 
               {/* Shareable Claim Key */}

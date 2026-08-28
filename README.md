@@ -22,8 +22,9 @@ EverTrust eliminates the need for trusted intermediaries:
 1. **Confidential Capital Shielding**: Digital assets (STRK) are deposited into the **STRK20 Shielded Privacy Pool** managed by `EverTrustVault.cairo`.
 2. **Cryptographic Proof of Life (Heartbeat)**: The owner configures a cadence period (e.g. 90 or 180 days) and periodically broadcasts an on-chain heartbeat ping that resets the countdown clock.
 3. **Deterministic State Machine**: If the owner misses their check-in and the grace period expires, the smart contract transitions state to `UNLOCKED_FOR_CLAIM`.
-4. **Zero-Link Succession**: Designated heirs redeem their allocated Poseidon note commitments directly into **fresh, unlinked Starknet addresses** with zero public on-chain association with the deceased.
-5. **Dynamic Theme Engine**: Comprehensive Dark Mode (Obsidian & Electric Purple) and Light Mode (Clean Alabaster & Violet) toggle with smooth transitions.
+4. **Encrypted Digital Will & Private Instructions**: Confidential messages, physical safe combinations, and estate instructions are AES-GCM encrypted per heir and only decrypted upon valid claim redemption.
+5. **Zero-Link Succession**: Designated heirs redeem their allocated Poseidon note commitments directly into **fresh, unlinked Starknet addresses** with zero public on-chain association with the deceased.
+6. **Dynamic Theme Engine**: Comprehensive Dark Mode (Obsidian & Electric Purple) and Light Mode (Clean Alabaster & Violet) toggle with smooth transitions.
 
 ---
 

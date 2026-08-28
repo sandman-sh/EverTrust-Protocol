@@ -37,6 +37,8 @@ export interface Beneficiary {
   commitment?: string;
   claimKey?: string;
   claimed?: boolean;
+  encryptedMessage?: string;
+  decryptedMessage?: string;
 }
 
 export interface TrustVault {

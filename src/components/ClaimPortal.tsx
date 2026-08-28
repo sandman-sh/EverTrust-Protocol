@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useStarknetWallet } from '@/context/StarknetWalletContext';
 import { formatStrkAmount } from '@/lib/strk20';
-import { Shield, Key, Lock, CheckCircle2, AlertTriangle, ArrowRight, Wallet, Sparkles } from 'lucide-react';
+import { Shield, Key, Lock, CheckCircle2, AlertTriangle, ArrowRight, Wallet, Sparkles, FileText, ScrollText } from 'lucide-react';
 
 export const ClaimPortal: React.FC = () => {
   const { vaults, claimInheritance, isConnected, address } = useStarknetWallet();
@@ -14,7 +14,7 @@ export const ClaimPortal: React.FC = () => {
     address || '0x07f18a2bc41904ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75'
   );
   const [isClaiming, setIsClaiming] = useState<boolean>(false);
-  const [claimResult, setClaimResult] = useState<{ success: boolean; amount?: string; error?: string } | null>(null);
+  const [claimResult, setClaimResult] = useState<{ success: boolean; amount?: string; decryptedMessage?: string; error?: string } | null>(null);
 
   const selectedVault = vaults.find(v => v.id === selectedVaultId) || vaults[0];
   const isUnlocked = selectedVault?.state === 'UNLOCKED_FOR_CLAIM';
@@ -152,33 +152,55 @@ export const ClaimPortal: React.FC = () => {
 
           {/* Claim Outcome Result Alert */}
           {claimResult && (
-            <div
-              className={`border p-4 ${
-                claimResult.success
-                  ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
-                  : 'border-red-500/50 bg-red-500/10 text-red-600 dark:text-red-400'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                {claimResult.success ? (
-                  <>
-                    <CheckCircle2 className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />
+            <div className="space-y-4">
+              <div
+                className={`border p-4 ${
+                  claimResult.success
+                    ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+                    : 'border-red-500/50 bg-red-500/10 text-red-600 dark:text-red-400'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  {claimResult.success ? (
+                    <>
+                      <CheckCircle2 className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />
+                      <div>
+                        <p className="font-mono text-xs font-bold uppercase tracking-wider">
+                          Succession Payout Executed!
+                        </p>
+                        <p className="mt-1 font-mono text-xs text-zinc-600 dark:text-steel">
+                          Transferred <strong>{claimResult.amount} STRK</strong> from the STRK20 Shielded Pool to recipient address <span className="font-bold text-zinc-900 dark:text-white">{recipientAddress.slice(0, 12)}...</span>
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <AlertTriangle className="h-5 w-5 text-red-500 dark:text-red-400" />
+                      <p className="font-mono text-xs font-bold">{claimResult.error}</p>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Decrypted Digital Will Showcase */}
+              {claimResult.success && claimResult.decryptedMessage && (
+                <div className="border border-purple-500/50 bg-purple-500/10 dark:bg-purple-950/20 p-5 shadow-lg">
+                  <div className="flex items-center gap-2 border-b border-purple-500/30 pb-3">
+                    <ScrollText className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                     <div>
-                      <p className="font-mono text-xs font-bold uppercase tracking-wider">
-                        Succession Payout Executed!
-                      </p>
-                      <p className="mt-1 font-mono text-xs text-zinc-600 dark:text-steel">
-                        Transferred <strong>{claimResult.amount} STRK</strong> from the STRK20 Shielded Pool to recipient address <span className="font-bold text-zinc-900 dark:text-white">{recipientAddress.slice(0, 12)}...</span>
+                      <h4 className="font-sans text-sm font-bold text-zinc-900 dark:text-white">
+                        Decrypted Confidential Digital Will & Instructions
+                      </h4>
+                      <p className="font-mono text-[0.65rem] text-purple-600 dark:text-purple-400">
+                        AES-GCM Decryption Key Verified • Private to Heir
                       </p>
                     </div>
-                  </>
-                ) : (
-                  <>
-                    <AlertTriangle className="h-5 w-5 text-red-500 dark:text-red-400" />
-                    <p className="font-mono text-xs font-bold">{claimResult.error}</p>
-                  </>
-                )}
-              </div>
+                  </div>
+                  <div className="mt-3.5 border border-purple-500/20 bg-white dark:bg-black p-4 font-mono text-xs text-zinc-800 dark:text-white leading-relaxed whitespace-pre-wrap">
+                    {claimResult.decryptedMessage}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
