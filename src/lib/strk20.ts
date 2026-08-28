@@ -28,6 +28,13 @@ export const STARKNET_CONFIG = {
   gracePeriodSeconds: 604800, // 7 days grace period
 };
 
+export interface VestingSchedule {
+  enabled: boolean;
+  initialUnlockPercent: number; // e.g. 25%
+  streamingDurationDays: number; // e.g. 365 days
+  totalTranches: number; // e.g. 4 quarterly tranches
+}
+
 export interface Beneficiary {
   id: string;
   name: string;
@@ -39,6 +46,7 @@ export interface Beneficiary {
   claimed?: boolean;
   encryptedMessage?: string;
   decryptedMessage?: string;
+  vestingSchedule?: VestingSchedule;
 }
 
 export interface TrustVault {
@@ -54,6 +62,7 @@ export interface TrustVault {
   beneficiaries: Beneficiary[];
   state: 'ACTIVE' | 'WARNING' | 'GRACE_PERIOD' | 'UNLOCKED_FOR_CLAIM' | 'SETTLED' | 'REVOKED';
   viewingKey?: string;
+  vestingSchedule?: VestingSchedule;
 }
 
 export function formatStrkAmount(amount: string | number): string {
