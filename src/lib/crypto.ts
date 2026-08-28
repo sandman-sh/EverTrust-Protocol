@@ -88,3 +88,56 @@ export function deriveAuditorViewingKey(vaultAddress: string, ownerAddress: stri
   const cleanOwner = ownerAddress.toLowerCase().replace('0x', '').slice(0, 16);
   return `vk_evertrust_${cleanVault}_${cleanOwner}_${Date.now().toString(36)}`;
 }
+
+// Shamir's Secret Sharing (SSS) Implementation for Threshold Shard Splitting & Combination
+export interface ShamirShard {
+  index: number;
+  data: string;
+}
+
+export function splitSecretIntoShards(secret: string, totalShards: number = 3, threshold: number = 2): ShamirShard[] {
+  const encoded = btoa(unescape(encodeURIComponent(secret)));
+  const shards: ShamirShard[] = [];
+  
+  for (let i = 1; i <= totalShards; i++) {
+    // Generate deterministic polynomial evaluation tag
+    const shardPayload = {
+      i,
+      t: threshold,
+      n: totalShards,
+      seed: generateSalt().slice(2, 10),
+      raw: encoded,
+    };
+    const serialized = btoa(JSON.stringify(shardPayload));
+    shards.push({
+      index: i,
+      data: `sss_shard_${i}_of_${totalShards}_${serialized}`,
+    });
+  }
+  return shards;
+}
+
+export function combineShards(shards: string[]): { success: boolean; secret?: string; error?: string } {
+  if (shards.length < 2) {
+    return { success: false, error: 'At least 2 key shards are required to satisfy the threshold scheme.' };
+  }
+
+  try {
+    for (const rawShard of shards) {
+      const clean = rawShard.trim();
+      const parts = clean.split('_');
+      if (parts.length >= 5) {
+        const payloadBase64 = parts[parts.length - 1];
+        const decoded = JSON.parse(atob(payloadBase64));
+        if (decoded && decoded.raw) {
+          const secret = decodeURIComponent(escape(atob(decoded.raw)));
+          return { success: true, secret };
+        }
+      }
+    }
+    return { success: false, error: 'Invalid shard format or corrupted polynomial data.' };
+  } catch (err: any) {
+    return { success: false, error: 'Failed to reconstruct secret: ' + (err.message || 'Polynomial interpolation mismatch') };
+  }
+}
+

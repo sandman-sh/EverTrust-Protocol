@@ -10,13 +10,14 @@ import { BeneficiaryManager } from '@/components/BeneficiaryManager';
 import { ClaimPortal } from '@/components/ClaimPortal';
 import { SelectiveDisclosure } from '@/components/SelectiveDisclosure';
 import { MainnetLedger } from '@/components/MainnetLedger';
+import { ShamirShardCombiner } from '@/components/ShamirShardCombiner';
 import { WalletGate } from '@/components/WalletGate';
 import { useStarknetWallet } from '@/context/StarknetWalletContext';
 
-export type AppTab = 'landing' | 'dashboard' | 'create' | 'beneficiaries' | 'claim' | 'audit' | 'ledger';
+export type AppTab = 'landing' | 'dashboard' | 'create' | 'beneficiaries' | 'claim' | 'audit' | 'ledger' | 'shards';
 
 // Tabs that require wallet connection
-const GATED_TABS: AppTab[] = ['dashboard', 'beneficiaries', 'claim', 'audit', 'ledger'];
+const GATED_TABS: AppTab[] = ['dashboard', 'beneficiaries', 'claim', 'audit', 'ledger', 'shards'];
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<AppTab>('landing');
@@ -99,6 +100,12 @@ export default function Home() {
         {activeTab === 'ledger' && (
           <div className="pt-20">
             <MainnetLedger />
+          </div>
+        )}
+
+        {activeTab === 'shards' && (
+          <div className="pt-20">
+            <ShamirShardCombiner onNavigateToClaim={claimKey => navigateTo('claim')} />
           </div>
         )}
       </main>
