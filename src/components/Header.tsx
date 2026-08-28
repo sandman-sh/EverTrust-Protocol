@@ -6,6 +6,8 @@ import { useTheme } from '@/context/ThemeContext';
 import { Shield, Activity, Wallet, ChevronDown, Check, X, ArrowUpRight, Copy, KeyRound, Sun, Moon, Lock } from 'lucide-react';
 import type { AppTab } from '@/app/page';
 
+import { NotificationCenter } from './NotificationCenter';
+
 interface HeaderProps {
   activeTab: AppTab;
   setActiveTab: (tab: AppTab) => void;
@@ -104,6 +106,9 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, openCre
 
           {/* Action CTAs */}
           <div className="flex items-center gap-3">
+            {/* Notification Center */}
+            {isConnected && <NotificationCenter onNavigate={setActiveTab} />}
+
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
