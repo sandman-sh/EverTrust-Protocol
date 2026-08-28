@@ -49,6 +49,15 @@ export interface Beneficiary {
   vestingSchedule?: VestingSchedule;
 }
 
+export interface Guardian {
+  id: string;
+  name: string;
+  address: string;
+  role: 'Legal Counsel' | 'Medical Physician' | 'Trusted Co-Signer' | 'Family Trustee';
+  hasAttested: boolean;
+  attestationTimestamp?: number;
+}
+
 export interface TrustVault {
   id: string;
   address: string;
@@ -63,6 +72,7 @@ export interface TrustVault {
   state: 'ACTIVE' | 'WARNING' | 'GRACE_PERIOD' | 'UNLOCKED_FOR_CLAIM' | 'SETTLED' | 'REVOKED';
   viewingKey?: string;
   vestingSchedule?: VestingSchedule;
+  guardians?: Guardian[];
 }
 
 export function formatStrkAmount(amount: string | number): string {

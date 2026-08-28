@@ -12,13 +12,14 @@ import { SelectiveDisclosure } from '@/components/SelectiveDisclosure';
 import { MainnetLedger } from '@/components/MainnetLedger';
 import { ShamirShardCombiner } from '@/components/ShamirShardCombiner';
 import { VestingManager } from '@/components/VestingManager';
+import { GuardianHub } from '@/components/GuardianHub';
 import { WalletGate } from '@/components/WalletGate';
 import { useStarknetWallet } from '@/context/StarknetWalletContext';
 
-export type AppTab = 'landing' | 'dashboard' | 'create' | 'beneficiaries' | 'claim' | 'audit' | 'ledger' | 'shards' | 'vesting';
+export type AppTab = 'landing' | 'dashboard' | 'create' | 'beneficiaries' | 'claim' | 'audit' | 'ledger' | 'shards' | 'vesting' | 'guardians';
 
 // Tabs that require wallet connection
-const GATED_TABS: AppTab[] = ['dashboard', 'beneficiaries', 'claim', 'audit', 'ledger', 'shards', 'vesting'];
+const GATED_TABS: AppTab[] = ['dashboard', 'beneficiaries', 'claim', 'audit', 'ledger', 'shards', 'vesting', 'guardians'];
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<AppTab>('landing');
@@ -113,6 +114,12 @@ export default function Home() {
         {activeTab === 'vesting' && (
           <div className="pt-20">
             <VestingManager />
+          </div>
+        )}
+
+        {activeTab === 'guardians' && (
+          <div className="pt-20">
+            <GuardianHub />
           </div>
         )}
       </main>

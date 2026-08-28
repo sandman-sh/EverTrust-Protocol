@@ -33,11 +33,12 @@ interface StarknetWalletContextType {
   revokeVault: (vaultId: string) => Promise<boolean>;
   setActiveVaultId: (vaultId: string) => void;
   generateAuditorKey: (vaultId: string) => string;
+  toggleGuardianAttestation: (vaultId: string, guardianId: string) => Promise<boolean>;
 }
 
 const StarknetWalletContext = createContext<StarknetWalletContextType | undefined>(undefined);
 
-// Initial Demo/Mainnet Vault Seeds with encrypted Digital Will messages
+// Initial Demo/Mainnet Vault Seeds with encrypted Digital Will messages & Social Guardians
 const DEFAULT_INITIAL_VAULTS: TrustVault[] = [
   {
     id: 'vault_genesis_01',
@@ -51,6 +52,23 @@ const DEFAULT_INITIAL_VAULTS: TrustVault[] = [
     gracePeriodSeconds: 604800,
     state: 'ACTIVE',
     viewingKey: 'vk_evertrust_056a8171_02a1b92c_k918z',
+    guardians: [
+      {
+        id: 'g1',
+        name: 'Dr. Marcus Vance (Physician)',
+        address: '0x07a119e42c26d83a11bf74ca966f63bbbd0509844098ff63f5adef2a4a96',
+        role: 'Medical Physician',
+        hasAttested: true,
+        attestationTimestamp: Math.floor(Date.now() / 1000) - 3600 * 48,
+      },
+      {
+        id: 'g2',
+        name: 'Elena Rostova (Estate Counsel)',
+        address: '0x018f6925422c85da8c9e0c1572adf4316a9821ffabc4b29db37d11c6a0c2844a',
+        role: 'Legal Counsel',
+        hasAttested: false,
+      },
+    ],
     beneficiaries: [
       {
         id: 'b1',
@@ -364,6 +382,34 @@ export const StarknetWalletProvider = ({ children }: { children: ReactNode }) =>
     return vault.viewingKey || deriveAuditorViewingKey(vault.address, vault.ownerAddress);
   };
 
+  const toggleGuardianAttestation = async (vaultId: string, guardianId: string): Promise<boolean> => {
+    try {
+      const now = Math.floor(Date.now() / 1000);
+      setVaults(prev =>
+        prev.map(v => {
+          if (v.id === vaultId && v.guardians) {
+            const updatedGuardians = v.guardians.map(g =>
+              g.id === guardianId
+                ? { ...g, hasAttested: !g.hasAttested, attestationTimestamp: !g.hasAttested ? now : undefined }
+                : g
+            );
+            return { ...v, guardians: updatedGuardians };
+          }
+          return v;
+        })
+      );
+      confetti({
+        particleCount: 60,
+        spread: 50,
+        origin: { y: 0.6 },
+        colors: ['#9333EA', '#A855F7', '#10B981'],
+      });
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
   const activeVault = vaults.find(v => v.id === activeVaultId) || vaults[0] || null;
 
   return (
@@ -384,6 +430,7 @@ export const StarknetWalletProvider = ({ children }: { children: ReactNode }) =>
         revokeVault,
         setActiveVaultId: setActiveVaultIdState,
         generateAuditorKey,
+        toggleGuardianAttestation,
       }}
     >
       {children}

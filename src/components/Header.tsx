@@ -39,6 +39,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, openCre
   const navTabs: { key: AppTab; label: string }[] = [
     { key: 'dashboard', label: 'Dashboard' },
     { key: 'beneficiaries', label: 'Beneficiaries' },
+    { key: 'guardians', label: 'Guardians' },
     { key: 'vesting', label: 'Trust Fund' },
     { key: 'shards', label: 'Shamir Shards' },
     { key: 'claim', label: 'Heir Claim' },
