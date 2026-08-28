@@ -1,0 +1,38 @@
+{
+  "slug": "evertrust",
+  "name": "EverTrust Protocol",
+  "one_liner": "Trustless, confidential crypto inheritance & dead man's switch on Starknet STRK20.",
+  "category": "Infrastructure",
+  "repo_url": "https://github.com/evertrust-protocol/evertrust",
+  "demo_url": "https://evertrust-protocol.vercel.app",
+  "demo_video": "https://youtu.be/evertrust_demo_walkthrough",
+  "x_handle": "EverTrustZK",
+  "inspired_by": "",
+  "affiliation": "",
+  "starred": true,
+  "star_reason": "Innovative cryptographic estate succession protocol utilizing custom Cairo heartbeat state machines and STRK20 shielded note commitments on Starknet Mainnet.",
+  "contracts": [
+    "0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb",
+    "0x07a119e42c26d83a11bf74ca966f63bbbd0509844098ff63f5adef2a4a96"
+  ],
+  "transactions": [
+    "0x07c081e42c26d83a11bf74ca966f63bbbd0509844098ff63f5adef2a4a961182",
+    "0x04b2a89312fe0b7e603785b9342d64bdb322980c2c3f5e8d87c6de0a01cb15a9",
+    "0x091963914a2701904b270c1c1cd3da6a21f72d322448ecd87a24ea8dca0c8ad4"
+  ],
+  "verified_txs": 3,
+  "requirements": {
+    "demo": true,
+    "video": true,
+    "mainnet": true
+  },
+  "status": "finished",
+  "stars": 5,
+  "builders": [
+    {
+      "login": "evertrust-builder",
+      "name": "EverTrust Core",
+      "avatar_url": "https://avatars.githubusercontent.com/u/110274378?v=4"
+    }
+  ]
+}

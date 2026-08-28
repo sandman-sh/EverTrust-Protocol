@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="12" fill="#09090B"/>
+  <rect x="2" y="2" width="60" height="60" rx="10" stroke="#9333EA" stroke-width="2" stroke-opacity="0.6"/>
+  <!-- Shield Outline -->
+  <path d="M32 10 L48 16 V30 C48 42 32 50 32 50 C32 50 16 42 16 30 V16 L32 10 Z" 
+        fill="rgba(147, 51, 234, 0.18)" 
+        stroke="#A855F7" 
+        stroke-width="2.5" 
+        stroke-linejoin="round"/>
+  <!-- Heartbeat EKG Pulse inside Shield -->
+  <path d="M22 30 L27 30 L29 23 L32 37 L35 25 L37 32 L42 30" 
+        stroke="#FFFFFF" 
+        stroke-width="2" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  <!-- Core Glow Dot -->
+  <circle cx="32" cy="37" r="1.8" fill="#C084FC"/>
+</svg>
