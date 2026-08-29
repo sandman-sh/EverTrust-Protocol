@@ -20,8 +20,13 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ onNaviga
       id: 'n1',
       title: 'Heartbeat Cadence Invariant',
       message: activeVault
-        ? `Vault "${activeVault.name}" is ACTIVE. Next heartbeat ping due in ${Math.round(activeVault.cadenceSeconds / 86400) - 12} days.`
-        : 'Next heartbeat check-in due in 78 days.',
+        ? (() => {
+            const now = Math.floor(Date.now() / 1000);
+            const expiry = activeVault.lastHeartbeatTimestamp + activeVault.cadenceSeconds;
+            const remainingDays = Math.max(0, Math.round((expiry - now) / 86400));
+            return `Vault "${activeVault.name}" is ${activeVault.state}. Next heartbeat ping due in ${remainingDays} days.`;
+          })()
+        : 'No active vault detected. Connect wallet and create a trust vault.',
       type: 'cadence',
       time: '12m ago',
       actionLabel: 'Send Ping Now',

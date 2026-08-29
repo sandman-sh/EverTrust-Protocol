@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStarknetWallet } from '@/context/StarknetWalletContext';
 import { formatStrkAmount } from '@/lib/strk20';
 import { Shield, Key, Lock, CheckCircle2, AlertTriangle, ArrowRight, Wallet, Sparkles, FileText, ScrollText } from 'lucide-react';
+
+const DEFAULT_RECIPIENT = '0x07f18a2bc41904ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75';
 
 export const ClaimPortal: React.FC = () => {
   const { vaults, claimInheritance, isConnected, address } = useStarknetWallet();
@@ -11,10 +13,17 @@ export const ClaimPortal: React.FC = () => {
   const [claimKeyInput, setClaimKeyInput] = useState<string>('claim_evertrust_sarah_901827419');
   const [beneficiaryIndex, setBeneficiaryIndex] = useState<number>(0);
   const [recipientAddress, setRecipientAddress] = useState<string>(
-    address || '0x07f18a2bc41904ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75'
+    address || DEFAULT_RECIPIENT
   );
   const [isClaiming, setIsClaiming] = useState<boolean>(false);
   const [claimResult, setClaimResult] = useState<{ success: boolean; amount?: string; decryptedMessage?: string; error?: string } | null>(null);
+
+  // Sync recipient address when wallet connects (only if user hasn't customized it)
+  useEffect(() => {
+    if (address && (recipientAddress === DEFAULT_RECIPIENT || recipientAddress === '')) {
+      setRecipientAddress(address);
+    }
+  }, [address]);
 
   const selectedVault = vaults.find(v => v.id === selectedVaultId) || vaults[0];
   const isUnlocked = selectedVault?.state === 'UNLOCKED_FOR_CLAIM';

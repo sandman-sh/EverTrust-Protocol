@@ -65,6 +65,28 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
     );
   };
 
+  const resetForm = () => {
+    setStep(1);
+    setError(null);
+    setVaultName('Primary Family Trust');
+    setDepositAmount('5000');
+    setSelectedCadence(STARKNET_CONFIG.cadencePresets[1].seconds);
+    setBeneficiaries([
+      {
+        name: 'Primary Beneficiary (Child)',
+        addressOrPubKey: '0x04ff4f083a4667930efe14963645f9bda00bb10d44e4c13a9ee808e66c076211',
+        percentage: 70,
+        message: 'Here is your 70% family estate fund. The cold storage seed phrase backup is in safe deposit box #419.',
+      },
+      {
+        name: 'Secondary Beneficiary (Partner)',
+        addressOrPubKey: '0x03ce58babb9bc3651131657c273aae00cca554ffdccb13dba8b2d06ce60d61d5',
+        percentage: 30,
+        message: 'Always remain self-sovereign. Maintain the family wealth with privacy and diligence.',
+      },
+    ]);
+  };
+
   const handleSubmit = async () => {
     if (totalPercentage !== 100) {
       setError(`Total beneficiary allocation must equal 100% (currently ${totalPercentage}%)`);
@@ -83,6 +105,7 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
     setIsSubmitting(false);
 
     if (result.success) {
+      resetForm();
       onClose();
     } else {
       setError(result.error || 'Failed to deploy trust vault');
@@ -105,7 +128,7 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="text-zinc-400 hover:text-zinc-900 dark:text-graphite dark:hover:text-white">
+          <button onClick={() => { resetForm(); onClose(); }} className="text-zinc-400 hover:text-zinc-900 dark:text-graphite dark:hover:text-white">
             <X className="h-5 w-5" />
           </button>
         </div>

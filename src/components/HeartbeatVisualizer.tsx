@@ -57,14 +57,14 @@ export const HeartbeatVisualizer: React.FC<HeartbeatVisualizerProps> = ({
           </p>
         </div>
 
-        {onPing && state === 'ACTIVE' && (
+        {onPing && (state === 'ACTIVE' || state === 'GRACE_PERIOD' || state === 'WARNING') && (
           <button
             onClick={onPing}
             disabled={isPinging}
-            className="btn-primary group relative px-6 py-3 text-xs shadow-lg"
+            className={`btn-primary group relative px-6 py-3 text-xs shadow-lg ${isGrace ? 'animate-pulse ring-2 ring-yellow-500/50' : ''}`}
           >
             <Heart className={`h-4 w-4 text-white transition-transform group-hover:scale-125 ${isPinging ? 'animate-spin' : 'animate-heartbeat'}`} />
-            <span>{isPinging ? 'Broadcasting Ping...' : 'Send Heartbeat Ping'}</span>
+            <span>{isPinging ? 'Broadcasting Ping...' : isGrace ? '⚠ Emergency Ping — Save Vault!' : 'Send Heartbeat Ping'}</span>
           </button>
         )}
       </div>

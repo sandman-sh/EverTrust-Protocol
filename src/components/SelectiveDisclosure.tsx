@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStarknetWallet } from '@/context/StarknetWalletContext';
 import { Key, Shield, Check, Copy, FileText, CheckCircle2, Lock, Eye } from 'lucide-react';
 
@@ -10,6 +10,14 @@ export const SelectiveDisclosure: React.FC = () => {
   const [copied, setCopied] = useState<boolean>(false);
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [verifiedReport, setVerifiedReport] = useState<any | null>(null);
+
+  // Regenerate viewing key when active vault changes
+  useEffect(() => {
+    if (activeVault) {
+      setViewingKey(generateAuditorKey(activeVault.id));
+      setVerifiedReport(null);
+    }
+  }, [activeVault?.id]);
 
   const copyKey = () => {
     navigator.clipboard.writeText(viewingKey);
