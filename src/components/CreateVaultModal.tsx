@@ -11,7 +11,7 @@ interface CreateVaultModalProps {
 }
 
 export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) => {
-  const { createVault, strkBalance } = useStarknetWallet();
+  const { createVault, strkBalance, address } = useStarknetWallet();
   const [step, setStep] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,16 +25,10 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
     { name: string; addressOrPubKey: string; percentage: number; message?: string }[]
   >([
     {
-      name: 'Primary Beneficiary (Child)',
-      addressOrPubKey: '0x04ff4f083a4667930efe14963645f9bda00bb10d44e4c13a9ee808e66c076211',
-      percentage: 70,
-      message: 'Here is your 70% family estate fund. The cold storage seed phrase backup is in safe deposit box #419.',
-    },
-    {
-      name: 'Secondary Beneficiary (Partner)',
-      addressOrPubKey: '0x03ce58babb9bc3651131657c273aae00cca554ffdccb13dba8b2d06ce60d61d5',
-      percentage: 30,
-      message: 'Always remain self-sovereign. Maintain the family wealth with privacy and diligence.',
+      name: 'Primary Beneficiary',
+      addressOrPubKey: '',
+      percentage: 100,
+      message: '',
     },
   ]);
 
@@ -69,20 +63,14 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
     setStep(1);
     setError(null);
     setVaultName('Primary Family Trust');
-    setDepositAmount('5000');
+    setDepositAmount('0.1');
     setSelectedCadence(STARKNET_CONFIG.cadencePresets[1].seconds);
     setBeneficiaries([
       {
-        name: 'Primary Beneficiary (Child)',
-        addressOrPubKey: '0x04ff4f083a4667930efe14963645f9bda00bb10d44e4c13a9ee808e66c076211',
-        percentage: 70,
-        message: 'Here is your 70% family estate fund. The cold storage seed phrase backup is in safe deposit box #419.',
-      },
-      {
-        name: 'Secondary Beneficiary (Partner)',
-        addressOrPubKey: '0x03ce58babb9bc3651131657c273aae00cca554ffdccb13dba8b2d06ce60d61d5',
-        percentage: 30,
-        message: 'Always remain self-sovereign. Maintain the family wealth with privacy and diligence.',
+        name: 'Primary Beneficiary',
+        addressOrPubKey: '',
+        percentage: 100,
+        message: '',
       },
     ]);
   };
@@ -90,6 +78,12 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
   const handleSubmit = async () => {
     if (totalPercentage !== 100) {
       setError(`Total beneficiary allocation must equal 100% (currently ${totalPercentage}%)`);
+      return;
+    }
+
+    const invalidAddress = beneficiaries.find(b => !b.addressOrPubKey || !b.addressOrPubKey.startsWith('0x'));
+    if (invalidAddress) {
+      setError(`Please enter a valid Starknet address (0x...) for "${invalidAddress.name}"`);
       return;
     }
 
@@ -258,13 +252,27 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
                     )}
                   </div>
 
-                  <input
-                    type="text"
-                    value={b.addressOrPubKey}
-                    onChange={e => updateBeneficiary(idx, 'addressOrPubKey', e.target.value)}
-                    placeholder="Starknet Address or Ephemeral Public Key (0x...)"
-                    className="w-full border border-zinc-200 bg-white dark:border-white/10 dark:bg-night p-2 font-mono text-[0.7rem] text-zinc-700 dark:text-steel focus:border-purple-500 focus:outline-none"
-                  />
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[0.65rem] text-zinc-500 dark:text-graphite">Beneficiary Starknet Address:</span>
+                      {address && (
+                        <button
+                          type="button"
+                          onClick={() => updateBeneficiary(idx, 'addressOrPubKey', address)}
+                          className="font-mono text-[0.65rem] text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 font-bold"
+                        >
+                          + Use My Connected Address
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      type="text"
+                      value={b.addressOrPubKey}
+                      onChange={e => updateBeneficiary(idx, 'addressOrPubKey', e.target.value)}
+                      placeholder="0x... (Recipient Starknet Address)"
+                      className="w-full border border-zinc-200 bg-white dark:border-white/10 dark:bg-night p-2 font-mono text-[0.7rem] text-zinc-700 dark:text-steel focus:border-purple-500 focus:outline-none"
+                    />
+                  </div>
 
                   {/* Encrypted Digital Will Note */}
                   <div>
