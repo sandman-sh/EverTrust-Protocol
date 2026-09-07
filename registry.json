@@ -3,15 +3,18 @@
   "name": "EverTrust Protocol",
   "one_liner": "Trustless, confidential crypto inheritance & dead man's switch on Starknet STRK20.",
   "category": "Infrastructure",
-  "repo_url": "https://github.com/evertrust-protocol/evertrust",
-  "demo_url": "https://evertrust-protocol.vercel.app",
-  "demo_video": "https://youtu.be/evertrust_demo_walkthrough",
+  "repo_url": "https://github.com/sandman-sh/EverTrust-Protocol",
+  "demo_url": "https://evertrust-protocol.vercel.app/",
+  "demo_video": "https://www.youtube.com/watch?v=vDZx0Ixs5eM",
   "x_handle": "EverTrustZK",
   "inspired_by": "",
   "affiliation": "",
   "starred": true,
   "star_reason": "Innovative cryptographic estate succession protocol utilizing custom Cairo heartbeat state machines and STRK20 shielded note commitments on Starknet Mainnet.",
-  "contracts": [],
+  "contracts": [
+    "0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb",
+    "0x07a119e42c26d83a11bf74ca966f63bbbd0509844098ff63f5adef2a4a96"
+  ],
   "transactions": [],
   "verified_txs": 0,
   "requirements": {
