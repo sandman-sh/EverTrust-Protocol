@@ -18,7 +18,7 @@ export const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onCl
 
   // Form State
   const [vaultName, setVaultName] = useState<string>('Primary Family Trust');
-  const [depositAmount, setDepositAmount] = useState<string>('5000');
+  const [depositAmount, setDepositAmount] = useState<string>('0.1');
   const [selectedCadence, setSelectedCadence] = useState<number>(STARKNET_CONFIG.cadencePresets[1].seconds); // 90 days
 
   const [beneficiaries, setBeneficiaries] = useState<

@@ -5,7 +5,7 @@
 export const STARKNET_CONFIG = {
   chainId: 'SN_MAIN',
   networkName: 'Starknet Mainnet',
-  rpcUrl: 'https://starknet-mainnet.public.blastapi.io',
+  rpcUrl: 'https://api.cartridge.gg/x/starknet/mainnet',
   explorerUrl: 'https://starkscan.co',
   
   // Supported Token Addresses on Starknet Mainnet
@@ -14,7 +14,7 @@ export const STARKNET_CONFIG = {
   usdcTokenAddress: '0x053c91253bc9682c04929ca02ed00b3e423f6710d2ee7e0d5ebb06f3ecf368a8',
   
   // STRK20 Privacy Pool Contract Address on Mainnet
-  privacyPoolAddress: '0x0254a6b2997ef52e9f830ce1f543f6b29768295e8d17e2267d672c552cfe0d91',
+  privacyPoolAddress: '0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a',
   
   // EverTrust Vault Factory Contract Address (Mainnet)
   evertrustFactoryAddress: '0x07a119e42c26d83a11bf74ca966f63bbbd0509844098ff63f5adef2a4a96',

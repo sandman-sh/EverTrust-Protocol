@@ -86,16 +86,9 @@ All contracts are written in **Cairo 2.x** and deployed on **Starknet Mainnet**:
 
 ---
 
-## 🌐 Verified Mainnet Deployment
+## 🌐 Mainnet Pool & Deployment Target
 
-* **EverTrust Factory Contract:** `0x07a119e42c26d83a11bf74ca966f63bbbd0509844098ff63f5adef2a4a96`
-* **Genesis Vault Contract:** `0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb`
-* **STRK20 Shielded Pool:** `0x0254a6b2997ef52e9f830ce1f543f6b29768295e8d17e2267d672c552cfe0d91`
-
-### Verified Mainnet Transactions
-1. **Vault Creation & Initial STRK20 Shielding:** [`0x07c081e42c26d83a11bf74ca966f63bbbd0509844098ff63f5adef2a4a961182`](https://starkscan.co)
-2. **Heartbeat Cadence Invariant Update:** [`0x04b2a89312fe0b7e603785b9342d64bdb322980c2c3f5e8d87c6de0a01cb15a9`](https://starkscan.co)
-3. **Beneficiary Succession & Unshield Payout:** [`0x091963914a2701904b270c1c1cd3da6a21f72d322448ecd87a24ea8dca0c8ad4`](https://starkscan.co)
+* **STRK20 Shielded Privacy Pool (Mainnet):** [`0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a`](https://voyager.online/contract/0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a)
 
 ---
 
