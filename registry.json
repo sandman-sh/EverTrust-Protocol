@@ -15,14 +15,18 @@
     "0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb",
     "0x07a119e42c26d83a11bf74ca966f63bbbd0509844098ff63f5adef2a4a96"
   ],
-  "transactions": [],
-  "verified_txs": 0,
+  "transactions": [
+    "0x00b6d83f1d7eeb2d3f554960eb168600423ec80d59c21b37b2de3a6353b62ec9",
+    "0x065984ec26b903ea1d6dfffcfbb3ce3676a4f3b55a6b50064663b3cf56976cc0",
+    "0x062d10625ff2c628bde33cfd4afa69a50eff7c5815d1ce8aa210bd19e5df7435"
+  ],
+  "verified_txs": 3,
   "requirements": {
-    "demo": false,
-    "video": false,
-    "mainnet": false
+    "demo": true,
+    "video": true,
+    "mainnet": true
   },
-  "status": "building",
+  "status": "finished",
   "stars": 5,
   "builders": [
     {
